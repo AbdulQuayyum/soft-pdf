@@ -1,6 +1,12 @@
 import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { TbArrowBigRightLines } from 'react-icons/tb'
+import {
+  LoginLink,
+  RegisterLink,
+  getKindeServerSession,
+} from '@kinde-oss/kinde-auth-nextjs/server'
 
 import MaxWidthWrapper from './MaxWidthWrapper'
 import { buttonVariants } from './ui/button'
@@ -20,7 +26,34 @@ const Navbar = () => {
             />
           </Link>
           <div className="hidden items-center space-x-4 sm:flex">
-            
+            <>
+              <Link
+                href="/Pricing"
+                className={buttonVariants({
+                  variant: 'ghost',
+                  size: 'sm',
+                })}
+              >
+                Pricing
+              </Link>
+              <LoginLink
+                className={buttonVariants({
+                  variant: 'ghost',
+                  size: 'sm',
+                })}
+              >
+                Sign in
+              </LoginLink>
+              <RegisterLink
+                className={buttonVariants({
+                  size: 'sm',
+                  className: 'custom-hover',
+                })}
+              >
+                Get started{' '}
+                <TbArrowBigRightLines className="ml-2 h-5 w-5 hover-icon" />
+              </RegisterLink>
+            </>
           </div>
         </div>
       </MaxWidthWrapper>
