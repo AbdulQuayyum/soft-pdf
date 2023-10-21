@@ -15,9 +15,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="light">
       <Providers>
-        <body className="min-h-screen font-[nunito] antialiased grainy">
+        <body className="flex flex-col  min-h-screen font-[nunito] antialiased grainy">
           <Navbar />
-          {children}
+          <main className="flex-grow">{children}</main>
           <footer>
             <Footer />
             <BackToTop />
