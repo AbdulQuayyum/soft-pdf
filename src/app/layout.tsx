@@ -1,9 +1,11 @@
-import './globals.css'
 import { constructMetadata } from '@/Utilities/Utilities'
 import Navbar from '@/Components/Navbar'
 import Footer from '@/Components/Footer'
 import BackToTop from '@/Components/BackToTop'
 import Providers from '@/Components/Providers'
+
+import './globals.css'
+import 'react-loading-skeleton/dist/skeleton.css'
 
 export const metadata = constructMetadata()
 
