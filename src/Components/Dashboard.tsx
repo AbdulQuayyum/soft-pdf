@@ -13,9 +13,23 @@ import { Button } from './ui/button'
 import UploadButton from './UploadButton'
 
 const Dashboard = () => {
-  const [currentlyDeletingFile, setCurrentlyDeletingFile] =
-  useState<string | null>(null)
+  const [currentlyDeletingFile, setCurrentlyDeletingFile] = useState<string | null>(null)
+
+  const utils = trpc.useContext()
+
   const { data: files, isLoading } = trpc.getUserFiles.useQuery()
+
+  const { mutate: deleteFile } = trpc.deleteFile.useMutation({
+    onSuccess: () => {
+      utils.getUserFiles.invalidate()
+    },
+    onMutate({ id }) {
+      setCurrentlyDeletingFile(id)
+    },
+    onSettled() {
+      setCurrentlyDeletingFile(null)
+    },
+  })
 
   return (
     <main className="mx-auto max-w-7xl md:p-10">
@@ -43,7 +57,7 @@ const Dashboard = () => {
                   className="flex flex-col gap-2"
                 >
                   <div className="pt-6 px-6 flex w-full items-center justify-between space-x-6">
-                    <div className="h-10 w-10 flex-shrink-0 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500" />
+                    <div className="h-10 w-10 flex-shrink-0 rounded-full bg-gradient-to-r from-zinc-300 to-gray-900" />
                     <div className="flex-1 truncate">
                       <div className="flex items-center space-x-3">
                         <h3 className="truncate text-lg font-medium text-zinc-900">
@@ -63,16 +77,15 @@ const Dashboard = () => {
                     mocked
                   </div>
                   <Button
-                    // onClick={() =>
-                    //   deleteFile({ id: file.id })
-                    // }
-                    size='sm'
-                    className='w-full'
-                    variant='destructive'>
+                    onClick={() => deleteFile({ id: file.id })}
+                    size="sm"
+                    className="w-full"
+                    variant="destructive"
+                  >
                     {currentlyDeletingFile === file.id ? (
-                      <TbLoader3 className='h-4 w-4 animate-spin' />
+                      <TbLoader3 className="h-4 w-4 animate-spin" />
                     ) : (
-                      <TbTrashFilled className='h-4 w-4' />
+                      <TbTrashFilled className="h-4 w-4" />
                     )}
                   </Button>
                 </div>
