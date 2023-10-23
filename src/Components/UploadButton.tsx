@@ -9,11 +9,26 @@ import { TbLoader3 } from 'react-icons/tb'
 
 import { Button } from './ui/button'
 import { Progress } from './ui/progress'
+import { useToast } from './ui/use-toast'
 import { Dialog, DialogContent, DialogTrigger } from './ui/dialog'
+import { trpc } from '@/app/_trpc/Client'
+import { useUploadThing } from '@/Utilities/uploadthing'
 
 const UploadDropzone = () => {
+  const router = useRouter()
+  const { toast } = useToast()
   const [isUploading, setIsUploading] = useState<boolean>(false)
   const [uploadProgress, setUploadProgress] = useState<number>(0)
+
+  const { startUpload } = useUploadThing('PDFUploader')
+
+  const { mutate: startPolling } = trpc.getFile.useMutation({
+    onSuccess: (file) => {
+      router.push(`/Dashboard/${file.id}`)
+    },
+    retry: true,
+    retryDelay: 500,
+  })
 
   const startSimulatedProgress = () => {
     setUploadProgress(0)
@@ -39,8 +54,33 @@ const UploadDropzone = () => {
 
         const progressInterval = startSimulatedProgress()
 
+        // handle file uploading
+        const res = await startUpload(acceptedFile)
+
+        if (!res) {
+          return toast({
+            title: 'Something went wrong',
+            description: 'Please try again later',
+            variant: 'destructive',
+          })
+        }
+
+        const [fileResponse] = res
+
+        const key = fileResponse?.key
+
+        if (!key) {
+          return toast({
+            title: 'Something went wrong',
+            description: 'Please try again later',
+            variant: 'destructive',
+          })
+        }
+
         clearInterval(progressInterval)
         setUploadProgress(100)
+
+        startPolling({ key })
       }}
     >
       {({ getRootProps, getInputProps, acceptedFiles }) => (
@@ -59,7 +99,7 @@ const UploadDropzone = () => {
                   <span className="font-semibold">Click to upload</span> or drag
                   and drop
                 </p>
-                <p className="text-xs text-zinc-500">PDF (up to 4MB)</p>
+                <p className="text-xs text-zinc-500">PDF (up to 8MB)</p>
               </div>
 
               {acceptedFiles && acceptedFiles[0] ? (
@@ -76,7 +116,9 @@ const UploadDropzone = () => {
               {isUploading ? (
                 <div className="w-full mt-4 max-w-xs mx-auto">
                   <Progress
-                    indicatorColor={uploadProgress === 100 ? 'bg-green-500' : ''}
+                    indicatorColor={
+                      uploadProgress === 100 ? 'bg-green-500' : ''
+                    }
                     value={uploadProgress}
                     className="h-1 w-full bg-zinc-200"
                   />
@@ -89,12 +131,12 @@ const UploadDropzone = () => {
                 </div>
               ) : null}
 
-              {/* <input
+              <input
                 {...getInputProps()}
                 type="file"
                 id="dropzone-file"
                 className="hidden"
-              /> */}
+              />
             </label>
           </div>
         </div>
