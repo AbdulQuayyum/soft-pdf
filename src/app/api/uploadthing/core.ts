@@ -8,7 +8,7 @@ const f = createUploadthing();
 const auth = (req: Request) => ({ id: "fakeId" }); // Fake auth function
  
 export const ourFileRouter = {
-  PDFUploader: f({ pdf: { maxFileSize: "8MB" } })
+  PDFUploader: f({ pdf: { maxFileSize: "4MB" } })
     .middleware(async ({ req }) => {
       const { getUser } = getKindeServerSession()
       const user = getUser()

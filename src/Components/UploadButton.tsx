@@ -99,7 +99,7 @@ const UploadDropzone = () => {
                   <span className="font-semibold">Click to upload</span> or drag
                   and drop
                 </p>
-                <p className="text-xs text-zinc-500">PDF (up to 8MB)</p>
+                <p className="text-xs text-zinc-500">PDF (up to 4MB)</p>
               </div>
 
               {acceptedFiles && acceptedFiles[0] ? (
@@ -117,7 +117,7 @@ const UploadDropzone = () => {
                 <div className="w-full mt-4 max-w-xs mx-auto">
                   <Progress
                     indicatorColor={
-                      uploadProgress === 100 ? 'bg-green-500' : ''
+                      uploadProgress === 100 ? 'bg-green-500' : 'bg-zinc-400'
                     }
                     value={uploadProgress}
                     className="h-1 w-full bg-zinc-200"

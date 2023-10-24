@@ -6,6 +6,7 @@ import Providers from '@/Components/Providers'
 
 import './globals.css'
 import 'react-loading-skeleton/dist/skeleton.css'
+import 'simplebar-react/dist/simplebar.min.css'
 
 import { Toaster } from '@/Components/ui/toaster'
 
