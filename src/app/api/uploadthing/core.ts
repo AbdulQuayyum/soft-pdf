@@ -9,8 +9,6 @@ import { getPineconeClient } from "@/Utilities/pinecone";
 
 const f = createUploadthing();
 
-const auth = (req: Request) => ({ id: "fakeId" }); // Fake auth function
-
 export const ourFileRouter = {
   PDFUploader: f({ pdf: { maxFileSize: "4MB" } })
     .middleware(async ({ req }) => {
@@ -57,6 +55,7 @@ export const ourFileRouter = {
           pageLevelDocs,
           embeddings,
           {
+            //@ts-ignore
             pineconeIndex,
             namespace: createdFile.id,
           }
