@@ -10,7 +10,7 @@ import { getPineconeClient } from "@/Utilities/pinecone";
 const f = createUploadthing();
 
 export const ourFileRouter = {
-  PDFUploader: f({ pdf: { maxFileSize: "4MB" } })
+  PDFUploader: f({ pdf: { maxFileSize: "8MB" } })
     .middleware(async ({ req }) => {
       const { getUser } = getKindeServerSession()
       const user = getUser()

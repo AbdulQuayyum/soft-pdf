@@ -4,6 +4,7 @@ import { z } from 'zod'
 
 import { privateProcedure, publicProcedure, router } from './trpc'
 import { Database } from '@/Database'
+import { INFINITE_QUERY_LIMIT } from '@/Configurations/infiniteQuery'
 
 export const appRouter = router({
   authCallback: publicProcedure.query(async () => {
@@ -94,6 +95,57 @@ export const appRouter = router({
       if (!file) throw new TRPCError({ code: 'NOT_FOUND' })
 
       return file
+    }),
+
+  getFileMessages: privateProcedure
+    .input(
+      z.object({
+        limit: z.number().min(1).max(100).nullish(),
+        cursor: z.string().nullish(),
+        fileId: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { userId } = ctx
+      const { fileId, cursor } = input
+      const limit = input.limit ?? INFINITE_QUERY_LIMIT
+
+      const file = await Database.file.findFirst({
+        where: {
+          id: fileId,
+          userId,
+        },
+      })
+
+      if (!file) throw new TRPCError({ code: 'NOT_FOUND' })
+
+      const messages = await Database.message.findMany({
+        take: limit + 1,
+        where: {
+          fileId,
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+        cursor: cursor ? { id: cursor } : undefined,
+        select: {
+          id: true,
+          isUserMessage: true,
+          createdAt: true,
+          text: true,
+        },
+      })
+
+      let nextCursor: typeof cursor | undefined = undefined
+      if (messages.length > limit) {
+        const nextItem = messages.pop()
+        nextCursor = nextItem?.id
+      }
+
+      return {
+        messages,
+        nextCursor,
+      }
     }),
 })
 
