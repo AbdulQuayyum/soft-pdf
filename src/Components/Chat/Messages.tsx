@@ -1,8 +1,10 @@
 import { useContext, useEffect, useRef } from 'react'
+import { useIntersection } from '@mantine/hooks'
 import Skeleton from 'react-loading-skeleton'
 import { TbLoader3, TbMessages } from 'react-icons/tb'
 
 import { trpc } from '@/app/_trpc/Client'
+import { ChatContext } from './ChatContext'
 import { INFINITE_QUERY_LIMIT } from '@/Configurations/infiniteQuery'
 import Message from './Message'
 
@@ -11,6 +13,7 @@ interface MessagesProps {
 }
 
 const Messages = ({ fileId }: MessagesProps) => {
+  const { isLoading: isAiThinking } = useContext(ChatContext)
   const {
     data,
     isLoading,
@@ -40,9 +43,22 @@ const Messages = ({ fileId }: MessagesProps) => {
   }
 
   const combinedMessages = [
-    ...(true ? [loadingMessage] : []),
+    ...(isAiThinking ? [loadingMessage] : []),
     ...(messages ?? []),
   ]
+
+  const lastMessageRef = useRef<HTMLDivElement>(null)
+
+  const { ref, entry } = useIntersection({
+    root: lastMessageRef.current,
+    threshold: 1,
+  })
+
+  useEffect(() => {
+    if (entry?.isIntersecting) {
+      fetchNextPage()
+    }
+  }, [entry, fetchNextPage])
 
   return (
     <div className="flex max-h-[calc(100vh-3.5rem-7rem)] border-zinc-200 flex-1 flex-col-reverse gap-4 p-3 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch">
@@ -55,7 +71,7 @@ const Messages = ({ fileId }: MessagesProps) => {
           if (i === combinedMessages.length - 1) {
             return (
               <Message
-                // ref={ref}
+                ref={ref}
                 message={message}
                 isNextMessageSamePerson={isNextMessageSamePerson}
                 key={message.id}
