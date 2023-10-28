@@ -44,8 +44,8 @@ export const ourFileRouter = {
         const pagesAmt = pageLevelDocs.length
 
         // vectorize and index entire document
-        const pinecone = await getPineconeClient()
-        const pineconeIndex = pinecone.Index('soft-pdf')
+        const pinecone = getPineconeClient()
+        const pineconeIndex = pinecone.Index("softpdf")
 
         const embeddings = new OpenAIEmbeddings({
           openAIApiKey: process.env.OPENAI_API_KEY,
@@ -57,7 +57,7 @@ export const ourFileRouter = {
           {
             //@ts-ignore
             pineconeIndex,
-            namespace: createdFile.id,
+            // namespace: createdFile.id,
           }
         )  
 

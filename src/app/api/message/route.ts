@@ -44,12 +44,13 @@ export const POST = async (req: NextRequest) => {
     openAIApiKey: process.env.OPENAI_API_KEY,
   })
 
-  const pinecone = await getPineconeClient()
-  const pineconeIndex = pinecone.Index('soft-pdf')
+  const pinecone = getPineconeClient()
+  const pineconeIndex = pinecone.Index("softpdf")
 
   const vectorStore = await PineconeStore.fromExistingIndex(embeddings, {
+    //@ts-ignore
     pineconeIndex,
-    namespace: file.id,
+    // namespace: file.id,
   })
 
   const results = await vectorStore.similaritySearch(message, 4)
@@ -65,7 +66,7 @@ export const POST = async (req: NextRequest) => {
   })
 
   const formattedPrevMessages = prevMessages.map((msg) => ({
-    role: msg.isUserMessage ? ('user' as const) : ('assistant' as const),
+    role: msg.isUserMessage ? 'user' as const : 'assistant' as const,
     content: msg.text,
   }))
 
