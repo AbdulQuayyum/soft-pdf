@@ -112,7 +112,7 @@ const page = () => {
                     </h3>
                     <p className="text-gray-500">{tagline}</p>
                     <p className="my-5 font-display text-6xl font-semibold">
-                      ${price}
+                      ₦{price}
                     </p>
                     <p className="text-gray-500">per month</p>
                   </div>
