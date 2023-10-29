@@ -22,7 +22,7 @@ interface BillingFormProps {
 const BillingForm = ({ subscriptionPlan }: BillingFormProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  console.log(subscriptionPlan)
+  // console.log(subscriptionPlan)
   return (
     <MaxWidthWrapper className="max-w-5xl">
       <form
