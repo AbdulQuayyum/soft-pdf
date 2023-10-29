@@ -6,7 +6,7 @@ import { PiCheckBold } from 'react-icons/pi'
 import { TiCancelOutline } from 'react-icons/ti'
 import { TbArrowBigRightLines } from 'react-icons/tb'
 
-import { PLANS } from '@/Configurations/stripe'
+import { PLANS } from '@/Configurations/Plans'
 import { cn } from '@/Utilities/Utilities'
 import MaxWidthWrapper from '@/Components/MaxWidthWrapper'
 import UpgradeButton from '@/Components/UpgradeButton'
@@ -90,8 +90,7 @@ const page = () => {
           <TooltipProvider>
             {pricingItems.map(({ plan, tagline, quota, features }) => {
               const price =
-                PLANS.find((p) => p.slug === plan.toLowerCase())?.price
-                  .amount || 0
+                PLANS.find((p) => p.slug === plan.toLowerCase())?.amount || 0
 
               return (
                 <div
