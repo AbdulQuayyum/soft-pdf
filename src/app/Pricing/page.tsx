@@ -177,7 +177,7 @@ const page = () => {
                   <div className="p-5">
                     {plan === 'Free' ? (
                       <Link
-                        href={user ? '/Dashboard' : '/sign-in'}
+                        href={user ? '/Dashboard' : '/SignIn'}
                         className={buttonVariants({
                           className: 'w-full',
                           variant: 'secondary',
@@ -190,7 +190,7 @@ const page = () => {
                       <UpgradeButton />
                     ) : (
                       <Link
-                        href="/sign-in"
+                        href="/SignIn"
                         className={buttonVariants({
                           className: 'w-full',
                         })}

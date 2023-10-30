@@ -8,9 +8,10 @@ import {
   getKindeServerSession,
 } from '@kinde-oss/kinde-auth-nextjs/server'
 
+import { buttonVariants } from './ui/button'
 import UserAccountNav from './UserAccountNav'
 import MaxWidthWrapper from './MaxWidthWrapper'
-import { buttonVariants } from './ui/button'
+import MobileNav from './MobileNav'
 
 const Navbar = () => {
   const { getUser } = getKindeServerSession()
@@ -28,6 +29,9 @@ const Navbar = () => {
               className="w-full h-full"
             />
           </Link>
+
+          <MobileNav isAuth={!!user} />
+
           <div className="hidden items-center space-x-4 sm:flex">
             {!user ? (
               <>
@@ -61,11 +65,12 @@ const Navbar = () => {
             ) : (
               <>
                 <Link
-                  href='/Dashboard'
+                  href="/Dashboard"
                   className={buttonVariants({
                     variant: 'ghost',
                     size: 'sm',
-                  })}>
+                  })}
+                >
                   Dashboard
                 </Link>
 
