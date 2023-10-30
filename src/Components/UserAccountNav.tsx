@@ -2,8 +2,7 @@ import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { LogoutLink } from '@kinde-oss/kinde-auth-nextjs/server'
-import { SlUser } from 'react-icons/sl'
-import { FaGem } from 'react-icons/fa'
+import { SlUser, SlStar } from 'react-icons/sl'
 
 import { getUserSubscriptionPlan } from '@/Utilities/userPlan'
 import { Button } from './ui/button'
@@ -67,15 +66,15 @@ const UserAccountNav = async ({
         <DropdownMenuSeparator />
 
         <DropdownMenuItem asChild>
-          <Link href="/dashboard">Dashboard</Link>
+          <Link href="/Dashboard">Dashboard</Link>
         </DropdownMenuItem>
 
         <DropdownMenuItem asChild>
           {subscriptionPlan?.isSubscribed ? (
-            <Link href="/dashboard/billing">Manage Subscription</Link>
+            <Link href="/Dashboard/Billing">Manage Subscription</Link>
           ) : (
-            <Link href="/pricing">
-              Upgrade <FaGem className="text-blue-600 h-4 w-4 ml-1.5" />
+            <Link href="/Pricing">
+              Upgrade <SlStar className="text-zinc-900 h-4 w-4 ml-1.5" />
             </Link>
           )}
         </DropdownMenuItem>
