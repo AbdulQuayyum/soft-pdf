@@ -6,7 +6,6 @@ import { SlUser } from 'react-icons/sl'
 
 import { cn } from '@/Utilities/Utilities'
 import { ExtendedMessage } from '../../../types/message'
-import { Icons } from '../Icons'
 
 interface MessageProps {
   message: ExtendedMessage
@@ -26,14 +25,14 @@ const Message = forwardRef<HTMLDivElement, MessageProps>(
           className={cn(
             'relative rounded-lg flex h-8 w-8 aspect-square items-center justify-center',
             {
-              'order-2 bg-zinc-500 rounded-sm': message.isUserMessage,
+              'order-2 bg-black rounded-sm': message.isUserMessage,
               'order-1 bg-zinc-200 rounded-sm': !message.isUserMessage,
               invisible: isNextMessageSamePerson,
             },
           )}
         >
           {message.isUserMessage ? (
-            <SlUser className="fill-zinc-200 text-zinc-200 h-3/4 w-3/4" />
+            <SlUser className="fill-white text-white h-3/4 w-3/4" />
           ) : (
             <Image
               width={20}
@@ -53,7 +52,7 @@ const Message = forwardRef<HTMLDivElement, MessageProps>(
         >
           <div
             className={cn('px-4 py-2 rounded-lg inline-block', {
-              'bg-zinc-500 text-white': message.isUserMessage,
+              'bg-black text-white': message.isUserMessage,
               'bg-gray-200 text-gray-900': !message.isUserMessage,
               'rounded-br-none':
                 !isNextMessageSamePerson && message.isUserMessage,
@@ -75,8 +74,8 @@ const Message = forwardRef<HTMLDivElement, MessageProps>(
             {message.id !== 'loading-message' ? (
               <div
                 className={cn('text-xs select-none mt-2 w-full text-right', {
-                  'text-zinc-200': !message.isUserMessage,
-                  'text-zinc-500': message.isUserMessage,
+                  'text-black': !message.isUserMessage,
+                  'text-white': message.isUserMessage,
                 })}
               >
                 {format(new Date(message.createdAt), 'HH:mm')}
@@ -88,5 +87,7 @@ const Message = forwardRef<HTMLDivElement, MessageProps>(
     )
   },
 )
+
+Message.displayName = 'Message'
 
 export default Message
