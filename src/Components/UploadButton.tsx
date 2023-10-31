@@ -14,13 +14,15 @@ import { Dialog, DialogContent, DialogTrigger } from './ui/dialog'
 import { trpc } from '@/app/_trpc/Client'
 import { useUploadThing } from '@/Utilities/uploadthing'
 
-const UploadDropzone = () => {
+const UploadDropzone = ({ isSubscribed }: { isSubscribed: boolean }) => {
   const router = useRouter()
   const { toast } = useToast()
   const [isUploading, setIsUploading] = useState<boolean>(false)
   const [uploadProgress, setUploadProgress] = useState<number>(0)
 
-  const { startUpload } = useUploadThing('PDFUploader')
+  const { startUpload } = useUploadThing(
+    isSubscribed ? 'proPlanUploader' : 'freePlanUploader',
+  )
 
   const { mutate: startPolling } = trpc.getFile.useMutation({
     onSuccess: (file) => {
@@ -99,7 +101,10 @@ const UploadDropzone = () => {
                   <span className="font-semibold">Click to upload</span> or drag
                   and drop
                 </p>
-                <p className="text-xs text-zinc-500">PDF (up to 8MB)</p>
+                <p className="text-xs text-zinc-500">
+                  {' '}
+                  PDF (up to {isSubscribed ? '32' : '8'}MB)
+                </p>
               </div>
 
               {acceptedFiles && acceptedFiles[0] ? (
@@ -133,6 +138,7 @@ const UploadDropzone = () => {
 
               <input
                 {...getInputProps()}
+                disabled={true}
                 type="file"
                 id="dropzone-file"
                 className="hidden"
@@ -145,7 +151,7 @@ const UploadDropzone = () => {
   )
 }
 
-const UploadButton = () => {
+const UploadButton = ({ isSubscribed }: { isSubscribed: boolean }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   return (
     <Dialog
@@ -160,7 +166,7 @@ const UploadButton = () => {
         <Button>Upload PDF</Button>
       </DialogTrigger>
       <DialogContent>
-        <UploadDropzone />
+        <UploadDropzone isSubscribed={isSubscribed} />
       </DialogContent>
     </Dialog>
   )
